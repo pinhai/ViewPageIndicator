@@ -1,0 +1,4 @@
+include ':viewpagesingle', ':tabpageindicator', ':scrolltabindicator', ':myapplication', ':myapplication2'
+/*
+ * Copyright (C) 2016 Baidu, Inc. All Rights Reserved.
+ */

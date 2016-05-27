@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2016 Baidu, Inc. All Rights Reserved.
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:zane="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical">
+
+    <com.zane.customviewpager.view.ViewPagerLineIndicator
+        android:id="@+id/viewPagerLineIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/title_bar_bg_one_row"
+        zane:item_color="#ff00ff"
+        zane:item_count="6" >
+    </com.zane.customviewpager.view.ViewPagerLineIndicator>
+
+    <android.support.v4.view.ViewPager  
+        android:id="@+id/viewPager"  
+        android:layout_width="match_parent"  
+        android:layout_height="0dp"  
+        android:layout_weight="1" >  
+    </android.support.v4.view.ViewPager>  
+</LinearLayout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ViewPageIndicator.iml" filepath="$PROJECT_DIR$/ViewPageIndicator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myapplication/myapplication.iml" filepath="$PROJECT_DIR$/myapplication/myapplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myapplication2/myapplication2.iml" filepath="$PROJECT_DIR$/myapplication2/myapplication2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/scrolltabindicator/scrolltabindicator.iml" filepath="$PROJECT_DIR$/scrolltabindicator/scrolltabindicator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tabpageindicator/tabpageindicator.iml" filepath="$PROJECT_DIR$/tabpageindicator/tabpageindicator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/viewpagesingle/viewpagesingle.iml" filepath="$PROJECT_DIR$/viewpagesingle/viewpagesingle.iml" />
+    </modules>
+  </component>
+</project>
