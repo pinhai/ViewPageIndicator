@@ -20,6 +20,7 @@ import com.shizhefei.view.indicator.slidebar.ScrollBar.Gravity;
 
 public class FixedIndicatorView extends LinearLayout implements Indicator {
 
+
 	private IndicatorAdapter mAdapter;
 
 	private OnItemSelectedListener onItemSelectedListener;
@@ -105,8 +106,9 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 			mSelectedTabIndex = item;
 			final int tabCount = mAdapter.getCount();
 			for (int i = 0; i < tabCount; i++) {
-				final ViewGroup group = (ViewGroup) getChildAt(i);
-				View child = group.getChildAt(0);
+//				final ViewGroup group = (ViewGroup) getChildAt(i);
+//				View child = group.getChildAt(0);
+				View child = getChildAt(i);
 				final boolean isSelected = (i == item);
 				child.setSelected(isSelected);
 			}
@@ -154,7 +156,7 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 		return mSelectedTabIndex;
 	}
 
-	private List<ViewGroup> views = new LinkedList<ViewGroup>();
+	private List<View> views = new LinkedList<>();
 
 	private DataSetObserver dataSetObserver = new DataSetObserver() {
 		@Override
@@ -167,24 +169,29 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 			int newCount = mAdapter.getCount();
 			views.clear();
 			for (int i = 0; i < count && i < newCount; i++) {
-				views.add((ViewGroup) getChildAt(i));
+				views.add(getChildAt(i));
 			}
 			removeAllViews();
 			int size = views.size();
 			for (int i = 0; i < newCount; i++) {
-				LinearLayout result = new LinearLayout(getContext());
+//				LinearLayout result = new LinearLayout(getContext());
 				View view;
 				if (i < size) {
-					View temp = views.get(i).getChildAt(0);
-					views.get(i).removeView(temp);
-					view = mAdapter.getView(i, temp, result);
+					View temp = views.get(i);
+//					views.get(i).removeView(temp);
+//					view = mAdapter.getView(i, temp, result);
+					view = mAdapter.getView(i, temp, FixedIndicatorView.this);
 				} else {
-					view = mAdapter.getView(i, null, result);
+//					view = mAdapter.getView(i, null, result);
+					view = mAdapter.getView(i, null, FixedIndicatorView.this);
 				}
-				result.addView(view);
-				result.setOnClickListener(onClickListener);
-				result.setTag(i);
-				addView(result, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+//				result.addView(view);
+//				result.setOnClickListener(onClickListener);
+//				result.setTag(i);
+				view.setOnClickListener(onClickListener);
+				view.setTag(i);
+				addView(view, view.getLayoutParams() != null ? view.getLayoutParams()
+						: new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
 			}
 			mPreSelectedTabIndex = -1;
 			setCurrentItem(mSelectedTabIndex, false);
@@ -206,10 +213,10 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 		@Override
 		public void onClick(View v) {
 			int i = (Integer) v.getTag();
-			ViewGroup parent = (ViewGroup) v;
+//			ViewGroup parent = (ViewGroup) v;
 			setCurrentItem(i);
 			if (onItemSelectedListener != null) {
-				onItemSelectedListener.onItemSelected(parent.getChildAt(0), i, mPreSelectedTabIndex);
+				onItemSelectedListener.onItemSelected(v, i, mPreSelectedTabIndex);
 			}
 		}
 	};
@@ -222,28 +229,28 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 		int paddingTop = getPaddingTop();
 		if (this.scrollBar != null) {
 			switch (this.scrollBar.getGravity()) {
-			case BOTTOM_FLOAT:
-				paddingBottom = paddingBottom - scrollBar.getHeight(getHeight());
-				break;
+				case BOTTOM_FLOAT:
+					paddingBottom = paddingBottom - scrollBar.getHeight(getHeight());
+					break;
 
-			case TOP_FLOAT:
-				paddingTop = paddingTop - scrollBar.getHeight(getHeight());
-				break;
-			default:
-				break;
+				case TOP_FLOAT:
+					paddingTop = paddingTop - scrollBar.getHeight(getHeight());
+					break;
+				default:
+					break;
 			}
 		}
 		this.scrollBar = scrollBar;
 		switch (this.scrollBar.getGravity()) {
-		case BOTTOM_FLOAT:
-			paddingBottom = paddingBottom + scrollBar.getHeight(getHeight());
-			break;
+			case BOTTOM_FLOAT:
+				paddingBottom = paddingBottom + scrollBar.getHeight(getHeight());
+				break;
 
-		case TOP_FLOAT:
-			paddingTop = paddingTop + scrollBar.getHeight(getHeight());
-			break;
-		default:
-			break;
+			case TOP_FLOAT:
+				paddingTop = paddingTop + scrollBar.getHeight(getHeight());
+				break;
+			default:
+				break;
 		}
 		setPadding(getPaddingLeft(), paddingTop, getPaddingRight(), paddingBottom);
 		// measureScrollBar(true);
@@ -330,19 +337,19 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 		float offsetX = 0;
 		int offsetY = 0;
 		switch (this.scrollBar.getGravity()) {
-		case CENTENT_BACKGROUND:
-		case CENTENT:
-			offsetY = (getHeight() - scrollBar.getHeight(getHeight())) / 2;
-			break;
-		case TOP:
-		case TOP_FLOAT:
-			offsetY = 0;
-			break;
-		case BOTTOM:
-		case BOTTOM_FLOAT:
-		default:
-			offsetY = getHeight() - scrollBar.getHeight(getHeight());
-			break;
+			case CENTENT_BACKGROUND:
+			case CENTENT:
+				offsetY = (getHeight() - scrollBar.getHeight(getHeight())) / 2;
+				break;
+			case TOP:
+			case TOP_FLOAT:
+				offsetY = 0;
+				break;
+			case BOTTOM:
+			case BOTTOM_FLOAT:
+			default:
+				offsetY = getHeight() - scrollBar.getHeight(getHeight());
+				break;
 		}
 		View currentView = null;
 		if (!inRun.isFinished() && inRun.computeScrollOffset()) {
@@ -444,33 +451,33 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 		// return;
 		// }
 		switch (splitMethod) {
-		case SPLITMETHOD_EQUALS:
-			for (int i = 0; i < count; i++) {
-				View view = getChildAt(i);
-				LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-				layoutParams.width = 0;
-				layoutParams.weight = 1;
-				view.setLayoutParams(layoutParams);
-			}
-			break;
-		case SPLITMETHOD_WRAP:
-			for (int i = 0; i < count; i++) {
-				View view = getChildAt(i);
-				LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-				layoutParams.width = LayoutParams.WRAP_CONTENT;
-				layoutParams.weight = 0;
-				view.setLayoutParams(layoutParams);
-			}
-			break;
-		case SPLITMETHOD_WEIGHT:
-			for (int i = 0; i < count; i++) {
-				View view = getChildAt(i);
-				LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-				layoutParams.width = LayoutParams.WRAP_CONTENT;
-				layoutParams.weight = 1;
-				view.setLayoutParams(layoutParams);
-			}
-			break;
+			case SPLITMETHOD_EQUALS:
+				for (int i = 0; i < count; i++) {
+					View view = getChildAt(i);
+					LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+					layoutParams.width = 0;
+					layoutParams.weight = 1;
+					view.setLayoutParams(layoutParams);
+				}
+				break;
+			case SPLITMETHOD_WRAP:
+				for (int i = 0; i < count; i++) {
+					View view = getChildAt(i);
+					LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+					layoutParams.width = LayoutParams.WRAP_CONTENT;
+					layoutParams.weight = 0;
+					view.setLayoutParams(layoutParams);
+				}
+				break;
+			case SPLITMETHOD_WEIGHT:
+				for (int i = 0; i < count; i++) {
+					View view = getChildAt(i);
+					LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+					layoutParams.width = LayoutParams.WRAP_CONTENT;
+					layoutParams.weight = 1;
+					view.setLayoutParams(layoutParams);
+				}
+				break;
 		}
 	}
 
@@ -529,8 +536,9 @@ public class FixedIndicatorView extends LinearLayout implements Indicator {
 		if (position < 0 || position > mAdapter.getCount() - 1) {
 			return null;
 		}
-		final ViewGroup group = (ViewGroup) getChildAt(position);
-		return group.getChildAt(0);
+//		final ViewGroup group = (ViewGroup) getChildAt(position);
+//		return group.getChildAt(0);
+		return getChildAt(position);
 	}
 
 	@Override
